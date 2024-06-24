@@ -1,18 +1,13 @@
 const express = require("express");
-const PostController = require("./controllers/PostController");
 const app = express();
 const port = 3000;
+const router = require("./routes");
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(router);
 
-app.get("/", (req, res) => {
-  res.redirect("/Posts");
-});
-
-app.get("/Posts", PostController.findAllPosts);
-
-app.post("/Posts", PostController.createPost);
+//!-- no 10-12 day 1 belum
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
