@@ -9,4 +9,16 @@ module.exports = class PostController {
       res.status(500).json({ message: "Internal Server Error" });
     }
   }
+
+  static async createPost(req, res) {
+    try {
+      console.log(req.body);
+      await Post.create(req.body);
+      res
+        .status(201)
+        .json({ message: `Post with the tile ${req.body.title} published` });
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  }
 };
