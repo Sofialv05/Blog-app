@@ -10,7 +10,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       Post.belongsTo(models.Category);
-      Post.belongsTo(models.User);
+      Post.belongsTo(models.User, {
+        foreignKey: "AuthorId",
+        as: "Author",
+        targetKey: "id",
+      });
     }
   }
   Post.init(
@@ -18,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       title: DataTypes.STRING,
       content: DataTypes.TEXT,
       imgUrl: DataTypes.STRING,
-      categoryId: DataTypes.INTEGER,
-      authorId: DataTypes.INTEGER,
+      CategoryId: DataTypes.INTEGER,
+      AuthorId: DataTypes.INTEGER,
     },
     {
       sequelize,
