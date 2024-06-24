@@ -1,0 +1,18 @@
+[
+    {
+        "username": "admin1",
+        "email": "admin1@example.com",
+        "password": "admin123",
+        "role": "Admin",
+        "phoneNumber": "123-456-7890",
+        "address": "123 Admin St, Adminville"
+    },
+    {
+        "username": "admin2",
+        "email": "admin2@example.com",
+        "password": "admin456",
+        "role": "Admin",
+        "phoneNumber": "234-567-8901",
+        "address": "456 Admin Ave, Admin City"
+    }
+]

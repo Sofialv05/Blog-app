@@ -1,0 +1,42 @@
+[
+    {
+        "username": "staff1",
+        "email": "staff1@example.com",
+        "password": "staff123",
+        "role": "Staff",
+        "phoneNumber": "456-789-0123",
+        "address": "321 Staff Rd, Stafftown"
+    },
+    {
+        "username": "staff2",
+        "email": "staff2@example.com",
+        "password": "staff456",
+        "role": "Staff",
+        "phoneNumber": "567-890-1234",
+        "address": "654 Staff Ave, Staff City"
+    },
+    {
+        "username": "staff3",
+        "email": "staff3@example.com",
+        "password": "staff789",
+        "role": "Staff",
+        "phoneNumber": "678-901-2345",
+        "address": "987 Staff Blvd, Staffville"
+    },
+    {
+        "username": "staff4",
+        "email": "staff4@example.com",
+        "password": "staff987",
+        "role": "Staff",
+        "phoneNumber": "789-012-3456",
+        "address": "741 Staff Lane, Staffberg"
+    },
+    {
+        "username": "staff5",
+        "email": "staff5@example.com",
+        "password": "staff654",
+        "role": "Staff",
+        "phoneNumber": "890-123-4567",
+        "address": "369 Staff Street, Stafffield"
+    }
+]

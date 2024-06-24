@@ -3,11 +3,11 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    const categories = require("../data/categories.json").map((e) => {
+    const posts = require("../data/posts.json").map((e) => {
       e.createdAt = e.updatedAt = new Date();
       return e;
     });
-    await queryInterface.bulkInsert("Categories", categories, {});
+    await queryInterface.bulkInsert("Posts", posts, {});
     /**
      * Add seed commands here.
      *
@@ -20,7 +20,7 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.bulkDelete("Categories", null, {
+    await queryInterface.bulkDelete("Posts", null, {
       truncate: true,
       restartIdentity: true,
       cascade: true,
