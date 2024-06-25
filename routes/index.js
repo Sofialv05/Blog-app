@@ -8,11 +8,14 @@ router.get("/", (req, res) => {
   res.redirect("/Posts");
 });
 
+//--------main entity
 router.use("/posts", postRouters);
 
 //--------support entity
 router.use("/categories", categoryRouters);
-router.use("/Pub", categoryRouters);
+
+//------public
+router.use("/pub", categoryRouters);
 
 router.post("/add-user", UserController.register);
 router.post("/login", UserController.login);

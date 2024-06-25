@@ -4,9 +4,16 @@ const jwt = require("jsonwebtoken");
 
 module.exports = class UserController {
   static async register(req, res) {
+    const { username, email, password, phoneNumber, address } = req.body;
     //done
     try {
-      const user = await User.create(req.body);
+      const user = await User.create({
+        username,
+        email,
+        password,
+        phoneNumber,
+        address,
+      });
       res
         .status(201)
         .json({ id: user.id, username: user.username, email: user.email });
@@ -53,7 +60,7 @@ module.exports = class UserController {
       }
 
       //apabila email dan password dah bener, bikin token yg isi payloadnya id user
-      const SECRET_KEY = "SECRET_KEY";
+      const SECRET_KEY = process.env.SECRET_KEY;
       const token = jwt.sign({ id: user.id }, SECRET_KEY);
 
       //kasih access token nya ke user

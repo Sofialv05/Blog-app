@@ -47,22 +47,22 @@ module.exports = class CategoryController {
     }
   }
 
-  static async deleteCategoryById(req, res) {
-    //done
-    const { categoryId } = req.params;
-    try {
-      const deleteCategory = await Category.destroy({
-        where: {
-          id: +categoryId,
-        },
-      });
-      if (!deleteCategory) {
-        res.status(404).json({ message: "Category not found" });
-      } else {
-        res.status(200).json({ message: "Success deleting category" });
-      }
-    } catch (err) {
-      res.status(500).json({ message: "Internal Server Error" });
-    }
-  }
+  // static async deleteCategoryById(req, res) { // no 9
+  //   //done
+  //   const { categoryId } = req.params;
+  //   try {
+  //     const deleteCategory = await Category.destroy({
+  //       where: {
+  //         id: +categoryId,
+  //       },
+  //     });
+  //     if (!deleteCategory) {
+  //       res.status(404).json({ message: "Category not found" });
+  //     } else {
+  //       res.status(200).json({ message: "Success deleting category" });
+  //     }
+  //   } catch (err) {
+  //     res.status(500).json({ message: "Internal Server Error" });
+  //   }
+  // }
 };
