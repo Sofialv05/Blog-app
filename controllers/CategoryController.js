@@ -3,8 +3,9 @@ const { Category } = require("../models");
 module.exports = class CategoryController {
   //done
   static async createCategory(req, res) {
+    const { name } = req.body;
     try {
-      const createdCategory = await Category.create(req.body);
+      const createdCategory = await Category.create({ name });
       res.status(201).json(createdCategory);
     } catch (err) {
       if (err.name == "SequelizeValidationError") {
@@ -27,13 +28,14 @@ module.exports = class CategoryController {
 
   static async updateCategoryById(req, res) {
     //done
+    const { name } = req.body;
     const { categoryId } = req.params;
     try {
       const category = await Category.findByPk(categoryId);
       if (!category) {
         res.status(404).json({ message: "Category not found" });
       } else {
-        const updatedCategory = await category.update(req.body);
+        const updatedCategory = await category.update({ name });
         res.status(200).json(updatedCategory);
       }
     } catch (err) {

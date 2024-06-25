@@ -21,9 +21,15 @@ module.exports = class PostController {
 
   static async createPost(req, res) {
     //done
+    const { title, content, imgUrl, CategoryId } = req.body;
     try {
       //   console.log(req.body);
-      const createdPost = await Post.create(req.body);
+      const createdPost = await Post.create({
+        title,
+        content,
+        imgUrl,
+        CategoryId,
+      });
       res.status(201).json(createdPost);
     } catch (err) {
       if (err.name == "SequelizeValidationError") {
@@ -43,7 +49,7 @@ module.exports = class PostController {
       //   console.log(req.body);
       const post = await Post.findByPk(postId);
       if (!post) {
-        res.status(404).json({ message: "Post not found" });
+        res.status(404).json({ message: `Post with id: ${postId} not found` });
       } else {
         res.status(200).json(post);
       }
@@ -54,15 +60,21 @@ module.exports = class PostController {
 
   static async updatePostById(req, res) {
     //done
+    const { title, content, imgUrl, CategoryId } = req.body;
     const { postId } = req.params;
     try {
       //   console.log(req.body);
       const post = await Post.findByPk(postId);
       console.log(post);
       if (!post) {
-        res.status(404).json({ message: "Post not found" });
+        res.status(404).json({ message: `Post with id: ${postId} not found` });
       } else {
-        const updatedPost = await post.update(req.body);
+        const updatedPost = await post.update({
+          title,
+          content,
+          imgUrl,
+          CategoryId,
+        });
         res.status(200).json(updatedPost);
       }
     } catch (err) {
@@ -88,9 +100,11 @@ module.exports = class PostController {
       });
 
       if (!deletePost) {
-        res.status(404).json({ message: "Post not found" });
+        res.status(404).json({ message: `Post with id: ${postId} not found` });
       } else {
-        res.status(200).json({ message: "Success deleting post" });
+        res
+          .status(200)
+          .json({ message: `Success deleting post with id ${postId}` });
       }
     } catch (err) {
       res.status(500).json({ message: "Internal Server Error" });
