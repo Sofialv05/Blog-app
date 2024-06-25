@@ -1,6 +1,6 @@
 const { compare } = require("../helpers/bycript");
 const { User } = require("../models");
-const jwt = require("jsonwebtoken");
+const { signToken, verifyToken } = require("../helpers/jwt");
 
 module.exports = class UserController {
   static async register(req, res) {
@@ -60,8 +60,8 @@ module.exports = class UserController {
       }
 
       //apabila email dan password dah bener, bikin token yg isi payloadnya id user
-      const SECRET_KEY = process.env.SECRET_KEY;
-      const token = jwt.sign({ id: user.id }, SECRET_KEY);
+
+      const token = signToken({ id: user.id });
 
       //kasih access token nya ke user
       res.status(200).json({ access_token: token });
