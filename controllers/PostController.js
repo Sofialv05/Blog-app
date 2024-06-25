@@ -1,12 +1,20 @@
-const { Post } = require("../models");
+const { Post, User } = require("../models");
 module.exports = class PostController {
   static async findAllPosts(req, res) {
     //done
     try {
-      const posts = await Post.findAll();
+      const posts = await Post.findAll({
+        include: {
+          model: User,
+          as: "Author",
+          attributes: {
+            exclude: ["password"],
+          },
+        },
+      });
       res.status(200).json(posts);
     } catch (err) {
-      //   console.log(err);
+      console.log(err);
       res.status(500).json({ message: "Internal Server Error" });
     }
   }
