@@ -1,9 +1,9 @@
 const { compare } = require("../helpers/bycript");
 const { User } = require("../models");
-const { signToken, verifyToken } = require("../helpers/jwt");
+const { signToken } = require("../helpers/jwt");
 
 module.exports = class UserController {
-  static async register(req, res) {
+  static async register(req, res, next) {
     const { username, email, password, phoneNumber, address } = req.body;
     //done
     try {
@@ -18,45 +18,35 @@ module.exports = class UserController {
         .status(201)
         .json({ id: user.id, username: user.username, email: user.email });
     } catch (err) {
-      //   console.log(err.name);
-      if (
-        err.name == "SequelizeValidationError" ||
-        err.name == "SequelizeUniqueConstraintError"
-      ) {
-        res.status(400).json({ message: err.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal Server Error" });
-      }
+      // console.log(err);
+      next(err);
     }
   }
 
-  static async login(req, res) {
+  static async login(req, res, next) {
     const { email, password } = req.body;
     try {
       //login dengan email dan pw
       if (!email) {
-        res.status(400).json("Email is required");
-        return;
+        throw { name: "Required", message: "Email is required" };
       }
       if (!password) {
-        res.status(400).json("Password is required");
-        return;
+        throw { name: "Required", message: "Password is required" };
       }
 
       //nyari email yg sama di database
-      const user = await user.findOne({ where: { email } });
+      const user = await User.findOne({ where: { email } });
 
       if (!user) {
-        res.status(401).json({ message: "Email has not been registered" });
-        return;
+        throw { name: "Validate", message: "Email has not been registered" };
       }
 
       //kalo email ketemu, compare password dgn helper bcrypt
       const isValidPassword = compare(password, user.password);
+      // console.log(isValidPassword);
 
       if (!isValidPassword) {
-        res.status(401).json({ message: "invalid password" });
-        return;
+        throw { name: "Validate", message: "Invalid password" };
       }
 
       //apabila email dan password dah bener, bikin token yg isi payloadnya id user
@@ -66,7 +56,7 @@ module.exports = class UserController {
       //kasih access token nya ke user
       res.status(200).json({ access_token: token });
     } catch (err) {
-      res.status(500).json({ message: "Internal Server Error" });
+      next(err);
     }
   }
 };

@@ -3,10 +3,19 @@ const postRouters = require("./PostRouters");
 const categoryRouters = require("./CategoryRouters");
 const pubRouters = require("./PubRouters");
 const UserController = require("../controllers/UserController");
+const authentication = require("../middlewares/authentication");
+const errorHandler = require("../middlewares/errorHandler");
 
 router.get("/", (req, res) => {
-  res.redirect("/Posts");
+  res.redirect("/posts");
 });
+
+router.use("/pub", pubRouters);
+
+router.post("/add-user", UserController.register);
+router.post("/login", UserController.login);
+
+router.use(authentication);
 
 //--------main entity
 router.use("/posts", postRouters);
@@ -15,9 +24,7 @@ router.use("/posts", postRouters);
 router.use("/categories", categoryRouters);
 
 //------public
-router.use("/pub", categoryRouters);
 
-router.post("/add-user", UserController.register);
-router.post("/login", UserController.login);
+router.use(errorHandler);
 
 module.exports = router;
