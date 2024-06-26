@@ -1,4 +1,11 @@
 const { Post, User } = require("../models");
+const cloudinary = require("cloudinary").v2;
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
 module.exports = class PostController {
   static async findAllPosts(req, res, next) {
     //done
@@ -65,13 +72,39 @@ module.exports = class PostController {
       const post = await Post.findByPk(postId);
       // console.log(post);
 
-      const updatedPost = await post.update({
+      await post.update({
         title,
         content,
         imgUrl,
         CategoryId,
       });
-      res.status(200).json(updatedPost);
+      res.status(200).json(post);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async patchImgPostById(req, res, next) {
+    //done
+    // const { imgUrl } = req.body;
+    const { postId } = req.params;
+    try {
+      const post = await Post.findByPk(postId);
+      //   console.log(req.body);
+      // console.log(req.file);
+      const base64 = req.file.buffer.toString("base64");
+      // console.log(base64);
+
+      const base64url = `data:${req.file.mimetype};base64,${base64}`;
+
+      const result = await cloudinary.uploader.upload(base64url);
+
+      // console.log(post);
+
+      const updatedPost = await post.update({
+        imgUrl: result.url,
+      });
+      res.status(200).json(post);
     } catch (err) {
       next(err);
     }

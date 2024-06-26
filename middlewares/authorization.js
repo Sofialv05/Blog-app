@@ -17,7 +17,7 @@ const authorization = async (req, res, next) => {
   try {
     const { postId } = req.params;
     let { id, role } = req.user;
-    console.log(req.user);
+    // console.log(req.user);
 
     if (role === "Admin") {
       next();
