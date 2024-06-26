@@ -4,8 +4,9 @@
   "description": "> Tuliskan API Docs kamu di sini",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "npx nodemon app"
+    "test": "jest",
+    "dev": "npx nodemon app",
+    "start": "node bin/www"
   },
   "keywords": [],
   "author": "",
@@ -23,6 +24,7 @@
   "devDependencies": {
     "dotenv": "^16.4.5",
     "jest": "^29.7.0",
-    "nodemon": "^3.1.4"
+    "nodemon": "^3.1.4",
+    "supertest": "^7.0.0"
   }
 }

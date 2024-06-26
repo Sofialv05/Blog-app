@@ -86,22 +86,18 @@ module.exports = class PostController {
 
   static async patchImgPostById(req, res, next) {
     //done
-    // const { imgUrl } = req.body;
+
     const { postId } = req.params;
     try {
       const post = await Post.findByPk(postId);
-      //   console.log(req.body);
-      // console.log(req.file);
+
       const base64 = req.file.buffer.toString("base64");
-      // console.log(base64);
 
       const base64url = `data:${req.file.mimetype};base64,${base64}`;
 
       const result = await cloudinary.uploader.upload(base64url);
 
-      // console.log(post);
-
-      const updatedPost = await post.update({
+      await post.update({
         imgUrl: result.url,
       });
       res.status(200).json(post);
@@ -114,8 +110,7 @@ module.exports = class PostController {
     //done
     const { postId } = req.params;
     try {
-      //   console.log(req.body);
-      const deletePost = await Post.destroy({
+      await Post.destroy({
         where: {
           id: +postId,
         },

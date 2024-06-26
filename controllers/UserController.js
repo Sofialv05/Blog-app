@@ -14,9 +14,7 @@ module.exports = class UserController {
         phoneNumber,
         address,
       });
-      res
-        .status(201)
-        .json({ id: user.id, username: user.username, email: user.email });
+      res.status(201).json({ id: user.id, email: user.email });
     } catch (err) {
       // console.log(err);
       next(err);
