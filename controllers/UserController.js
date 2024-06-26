@@ -25,6 +25,9 @@ module.exports = class UserController {
     const { email, password } = req.body;
     try {
       //login dengan email dan pw
+      if (!email && !password) {
+        throw { name: "Required", message: "Email and Password is required" };
+      }
       if (!email) {
         throw { name: "Required", message: "Email is required" };
       }

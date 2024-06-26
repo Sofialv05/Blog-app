@@ -132,6 +132,16 @@ describe("POST /add-user", () => {
       expect(status).toBe(401);
       expect(body).toHaveProperty("message", "Unauthenticated");
     });
+
+    test("failed when the token is invalid", async () => {
+      const { status, body } = await request(app)
+        .post("/add-user")
+        .set("Authorization", "Bearer duafoiufh2198e14710284");
+
+      console.log(body);
+      expect(status).toBe(401);
+      expect(body).toHaveProperty("message", "Unauthenticated");
+    });
   });
 
   describe("Forbidden", () => {
