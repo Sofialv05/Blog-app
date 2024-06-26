@@ -21,6 +21,7 @@ const authorization = async (req, res, next) => {
 
     if (role === "Admin") {
       next();
+      return;
     }
 
     const post = await Post.findByPk(postId);
