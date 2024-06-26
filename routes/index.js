@@ -5,6 +5,10 @@ const pubRouters = require("./PubRouters");
 const UserController = require("../controllers/UserController");
 const authentication = require("../middlewares/authentication");
 const errorHandler = require("../middlewares/errorHandler");
+const {
+  authorization,
+  authorizeAdmin,
+} = require("../middlewares/authorization");
 
 router.get("/", (req, res) => {
   res.redirect("/posts");
@@ -12,11 +16,11 @@ router.get("/", (req, res) => {
 
 router.use("/pub", pubRouters);
 
-router.post("/add-user", UserController.register);
 router.post("/login", UserController.login);
 
 router.use(authentication);
 
+router.post("/add-user", authorizeAdmin, UserController.register);
 //--------main entity
 router.use("/posts", postRouters);
 

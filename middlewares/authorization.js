@@ -1,5 +1,18 @@
 const { Post } = require("../models");
 
+const authorizeAdmin = async (req, res, next) => {
+  try {
+    let { role } = req.user;
+
+    if (role !== "Admin") {
+      throw { name: "Forbidden" };
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
+};
+
 const authorization = async (req, res, next) => {
   try {
     const { postId } = req.params;
@@ -27,4 +40,4 @@ const authorization = async (req, res, next) => {
   }
 };
 
-module.exports = authorization;
+module.exports = { authorization, authorizeAdmin };

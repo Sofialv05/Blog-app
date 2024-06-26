@@ -6,11 +6,7 @@ router.get("/", CategoryController.findAllCategories); //7 done
 
 router.post("/", CategoryController.createCategory); //6 done
 
-router.put(
-  "/:categoryId",
-  authorization,
-  CategoryController.updateCategoryById
-); //8 done
+router.put("/:categoryId", CategoryController.updateCategoryById); //8 done
 
 // router.delete("/:categoryId", CategoryController.deleteCategoryById); //9 done
 

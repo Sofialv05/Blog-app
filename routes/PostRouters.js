@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const PostController = require("../controllers/PostController");
-const authorization = require("../middlewares/authorization");
+const { authorization } = require("../middlewares/authorization");
 
 router.get("/", PostController.findAllPosts); //done
 
