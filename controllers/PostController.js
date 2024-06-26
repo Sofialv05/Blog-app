@@ -1,6 +1,6 @@
 const { Post, User } = require("../models");
 module.exports = class PostController {
-  static async findAllPosts(req, res) {
+  static async findAllPosts(req, res, next) {
     //done
     try {
       const posts = await Post.findAll({
@@ -14,12 +14,12 @@ module.exports = class PostController {
       });
       res.status(200).json(posts);
     } catch (err) {
-      console.log(err);
-      res.status(500).json({ message: "Internal Server Error" });
+      // console.log(err);
+      next(err);
     }
   }
 
-  static async createPost(req, res) {
+  static async createPost(req, res, next) {
     //done
     const { title, content, imgUrl, CategoryId } = req.body;
     try {
@@ -32,17 +32,11 @@ module.exports = class PostController {
       });
       res.status(201).json(createdPost);
     } catch (err) {
-      if (err.name == "SequelizeValidationError") {
-        res.status(400).json({ message: err.errors[0].message });
-      } else if (err.name == "SequelizeForeignKeyConstraintError") {
-        res.status(400).json({ message: err.parent.detail });
-      } else {
-        res.status(500).json({ message: "Internal Server Error" });
-      }
+      next(err);
     }
   }
 
-  static async findPostById(req, res) {
+  static async findPostById(req, res, next) {
     //done
     const { postId } = req.params;
     try {
@@ -54,11 +48,11 @@ module.exports = class PostController {
         res.status(200).json(post);
       }
     } catch (err) {
-      res.status(500).json({ message: "Internal Server Error" });
+      next(err);
     }
   }
 
-  static async updatePostById(req, res) {
+  static async updatePostById(req, res, next) {
     //done
     const { title, content, imgUrl, CategoryId } = req.body;
     const { postId } = req.params;
@@ -78,17 +72,11 @@ module.exports = class PostController {
         res.status(200).json(updatedPost);
       }
     } catch (err) {
-      if (err.name == "SequelizeValidationError") {
-        res.status(400).json({ message: err.errors[0].message });
-      } else if (err.name == "SequelizeForeignKeyConstraintError") {
-        res.status(400).json({ message: err.parent.detail });
-      } else {
-        res.status(500).json({ message: "Internal Server Error" });
-      }
+      next(err);
     }
   }
 
-  static async deletePostById(req, res) {
+  static async deletePostById(req, res, next) {
     //done
     const { postId } = req.params;
     try {
@@ -107,7 +95,7 @@ module.exports = class PostController {
           .json({ message: `Success deleting post with id ${postId}` });
       }
     } catch (err) {
-      res.status(500).json({ message: "Internal Server Error" });
+      next(err);
     }
   }
 };

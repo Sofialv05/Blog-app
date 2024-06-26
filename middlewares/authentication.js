@@ -17,10 +17,7 @@ const authentication = async (req, res, next) => {
     if (!user) throw { name: "Unauthenticated" };
 
     req.user = { id: user.id };
-    // req.userId = payload.id;
-    // console.log(req.userId);
-    // console.log(payload);
-    // console.log(token);
+
     next();
   } catch (err) {
     // console.log(err.name);

@@ -2,31 +2,27 @@ const { Category } = require("../models");
 
 module.exports = class CategoryController {
   //done
-  static async createCategory(req, res) {
+  static async createCategory(req, res, next) {
     const { name } = req.body;
     try {
       const createdCategory = await Category.create({ name });
       res.status(201).json(createdCategory);
     } catch (err) {
-      if (err.name == "SequelizeValidationError") {
-        res.status(400).json({ message: err.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal Server Error" });
-      }
+      next(err);
     }
   }
 
-  static async findAllCategories(req, res) {
+  static async findAllCategories(req, res, next) {
     //done
     try {
       const categories = await Category.findAll();
       res.status(200).json(categories);
     } catch (err) {
-      res.status(500).json({ message: "Internal Server Error" });
+      next(err);
     }
   }
 
-  static async updateCategoryById(req, res) {
+  static async updateCategoryById(req, res, err) {
     //done
     const { name } = req.body;
     const { categoryId } = req.params;
@@ -39,11 +35,7 @@ module.exports = class CategoryController {
         res.status(200).json(updatedCategory);
       }
     } catch (err) {
-      if (err.name == "SequelizeValidationError") {
-        res.status(400).json({ message: err.errors[0].message });
-      } else {
-        res.status(500).json({ message: "Internal Server Error" });
-      }
+      next(err);
     }
   }
 
