@@ -22,18 +22,17 @@ module.exports = class CategoryController {
     }
   }
 
-  static async updateCategoryById(req, res, err) {
+  static async updateCategoryById(req, res, next) {
     //done
     const { name } = req.body;
     const { categoryId } = req.params;
     try {
       const category = await Category.findByPk(categoryId);
       if (!category) {
-        res.status(404).json({ message: "Category not found" });
-      } else {
-        const updatedCategory = await category.update({ name });
-        res.status(200).json(updatedCategory);
+        throw { name: "NotFound", message: "Category not found" };
       }
+      const updatedCategory = await category.update({ name });
+      res.status(200).json(updatedCategory);
     } catch (err) {
       next(err);
     }

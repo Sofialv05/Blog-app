@@ -1,24 +1,36 @@
 const errorHandler = (err, req, res, next) => {
+  let status = err.status || 500;
+  let message = err.message || "Internal Server Error";
+
   switch (err.name) {
     case "SequelizeValidationError":
     case "SequelizeUniqueConstraintError":
-      res.status(400).json({ message: err.errors[0].message });
+      status = 400;
+      message = err.errors[0].message;
       break;
     case "Required":
-      res.status(400).json({ message: err.message });
+      status = 400;
+      message = err.message;
       break;
     case "Validate":
-      res.status(401).json({ message: err.message });
+      status = 401;
+      message = err.message;
       break;
     case "Unauthenticated":
     case "JsonWebTokenError":
-      res.status(401).json({ message: "Unauthenticated" });
+      status = 401;
+      message = "Unauthenticated";
       break;
-
-    default:
-      res.status(500).json({ message: "Internal Server Error" });
+    case "Forbidden":
+      status = 403;
+      message = "Unauthorized";
+      break;
+    case "NotFound":
+      status = 404;
+      message = err.message;
       break;
   }
+  res.status(status).json({ message: message });
 };
 
 module.exports = errorHandler;

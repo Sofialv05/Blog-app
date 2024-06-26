@@ -1,5 +1,27 @@
-const authorization = (req, res, next) => {
+const { Post } = require("../models");
+
+const authorization = async (req, res, next) => {
   try {
+    const { postId } = req.params;
+    let { id, role } = req.user;
+    console.log(req.user);
+
+    if (role === "Admin") {
+      next();
+    }
+
+    const post = await Post.findByPk(postId);
+    console.log(post);
+
+    if (!post) {
+      throw {
+        name: "NotFound",
+        message: `Post not found`,
+      };
+    }
+
+    if (post.AuthorId !== id) throw { name: "Forbidden" };
+    next();
   } catch (err) {
     next(err);
   }
