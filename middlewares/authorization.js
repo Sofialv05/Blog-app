@@ -30,7 +30,6 @@ const authorization = async (req, res, next) => {
     if (!post) {
       throw {
         name: "NotFound",
-        message: `Post not found`,
       };
     }
 
