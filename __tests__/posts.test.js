@@ -1,12 +1,9 @@
 const app = require("../app");
 const request = require("supertest");
-const { sequelize, User, Post } = require("../models");
+const { sequelize, User } = require("../models");
 const { signToken } = require("../helpers/jwt");
 const { queryInterface } = sequelize;
 const categories = require("../data/categories.json");
-const posts = require("../data/posts.json");
-const staff = require("../data/staff.json");
-const { encrypt } = require("../helpers/bycript");
 
 const admin_test = {
   email: "admin1@gmail.com",
@@ -42,32 +39,15 @@ const new_post_2 = {
 let access_token_admin = "";
 let access_token_user1 = "";
 let access_token_user2 = "";
-// let userId_admin;
-// let userId_user1;
-// let post1;
-
 beforeAll(async () => {
   categories.forEach((e) => {
     e.createdAt = e.updatedAt = new Date();
   });
 
-  //   staff.forEach((e) => {
-  //     e.createdAt = e.updatedAt = new Date();
-  //     e.password = encrypt(e.password);
-  //   });
-
-  //   posts.forEach((e) => {
-  //     e.createdAt = e.updatedAt = new Date();
-  //   });
-
   await queryInterface.bulkInsert("Categories", categories, {});
-  //   queryInterface.bulkInsert("Users", staff, {});
-  //   queryInterface.bulkInsert("Posts", posts, {});
-
   let user = await User.create(admin_test);
   let user2 = await User.create(user_test_1);
   let user3 = await User.create(user_test_2);
-  //   post1 = await Post.create(new_post_2);
 
   access_token_admin = signToken({
     id: user.id,
@@ -418,78 +398,6 @@ describe("PUT /posts/:postId", () => {
     });
   });
 });
-
-// describe("PATCH /posts/:postId", () => {
-//   describe("Success", () => {
-//     test("success updating post's image by post's id", async () => {
-//       const { status, body } = await request(app)
-//         .patch("/posts/1")
-//         .set("Authorization", "Bearer " + access_token_user1)
-//         .send(new_post_2);
-
-//       console.log(body);
-//       expect(status).toBe(200);
-//       expect(body).toBeInstanceOf(Object);
-//       expect(body).toHaveProperty("id", expect.any(Number));
-//       expect(body).toHaveProperty("title", expect.any(String));
-//       expect(body).toHaveProperty("content", expect.any(String));
-//       expect(body).toHaveProperty("imgUrl");
-//       expect(body).toHaveProperty("CategoryId", expect.any(Number));
-//       expect(body).toHaveProperty("AuthorId", expect.any(Number));
-//     });
-//   });
-
-//   describe("Failed", () => {
-//     describe("Authentication Failed", () => {
-//       test("Failed when user is not logging in when trying to update a post's image by id", async () => {
-//         const { status, body } = await request(app)
-//           .patch("/posts/1")
-//           .send(new_post_2);
-
-//         // console.log(body);
-//         expect(status).toBe(401);
-//         expect(body).toHaveProperty("message", "Unauthenticated");
-//       });
-
-//       test("Failed when user's token is invalid when trying to update a post's image by id", async () => {
-//         const { status, body } = await request(app)
-//           .patch("/posts/1")
-//           .set("Authorization", "Bearer dsafdsafdsrtewefasdf")
-//           .send(new_post_2);
-
-//         // console.log(body);
-//         expect(status).toBe(401);
-//         expect(body).toHaveProperty("message", "Unauthenticated");
-//       });
-//     });
-
-//     describe("Post Not Found", () => {
-//       test("Failed getting a post when the post's id is unavailable", async () => {
-//         const { status, body } = await request(app)
-//           .patch("/posts/0")
-//           .set("Authorization", "Bearer " + access_token_user1)
-//           .send(new_post_2);
-
-//         // console.log(body);
-//         expect(status).toBe(404);
-//         expect(body).toHaveProperty("message", "Post not found");
-//       });
-//     });
-
-//     describe("Authorization Failed", () => {
-//       test("Failed when user's role is not an admin when trying to update a post's image by id", async () => {
-//         const { status, body } = await request(app)
-//           .patch("/posts/1")
-//           .set("Authorization", "Bearer " + access_token_user2)
-//           .send(new_post_2);
-
-//         console.log(body);
-//         expect(status).toBe(403);
-//         expect(body).toHaveProperty("message", "Unauthorized");
-//       });
-//     });
-//   });
-// }); //!!!
 
 describe("DELETE /posts/:postId", () => {
   describe("Failed", () => {

@@ -1,27 +1,26 @@
 const { Post } = require("../models");
 
 module.exports = class PubController {
-  static async getAllPosts(req, res) {
+  static async getAllPosts(req, res, next) {
     try {
       const posts = await Post.findAll();
       res.status(200).json(posts);
     } catch (err) {
-      res.status(500).json({ message: "Internal Server Error" });
+      next(err);
     }
   }
 
-  static async getPostById(req, res) {
+  static async getPostById(req, res, next) {
     const { postId } = req.params;
     try {
       const post = await Post.findByPk(postId);
 
-      if (!post) {
-        res.status(404).json({ message: `Post with id: ${postId} not found` });
-        return;
-      }
+      console.log(post);
+      if (!post) throw { name: "NotFound" };
+
       res.status(200).json(post);
     } catch (err) {
-      res.status(500).json({ message: "Internal Server Error" });
+      next(err);
     }
   }
 };

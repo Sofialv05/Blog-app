@@ -27,7 +27,7 @@ const errorHandler = (err, req, res, next) => {
       break;
     case "NotFound":
       status = 404;
-      message = err.message;
+      message = `Post not found`;
       break;
   }
   res.status(status).json({ message: message });

@@ -1,6 +1,5 @@
 const router = require("express").Router();
 const CategoryController = require("../controllers/CategoryController");
-const authorization = require("../middlewares/authorization");
 
 router.get("/", CategoryController.findAllCategories); //7 done
 

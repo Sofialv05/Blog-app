@@ -54,7 +54,6 @@ module.exports = class PostController {
       if (!post) {
         throw {
           name: "NotFound",
-          message: `Post not found`,
         };
       }
       res.status(200).json(post);
