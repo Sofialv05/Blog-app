@@ -50,6 +50,7 @@ module.exports = class UserController {
       //kasih access token nya ke user
       res.status(200).json({ access_token: token });
     } catch (err) {
+      console.log(err);
       next(err);
     }
   }

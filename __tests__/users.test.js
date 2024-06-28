@@ -1,50 +1,57 @@
 const app = require("../app");
 const request = require("supertest");
 const { sequelize, User } = require("../models");
-// const { encrypt } = require("../helpers/bycript");
 const { signToken } = require("../helpers/jwt");
 const { queryInterface } = sequelize;
-
-const admin_test = {
-  email: "admin1@gmail.com",
-  password: "123456",
-  role: "Admin",
-};
+let admins = require("../data/admins.json");
+let staff = require("../data/staff.json");
+const { encrypt } = require("../helpers/bycript");
 
 const user_test_1 = {
   email: "test1@gmail.com",
   password: "123456",
 };
 
-const user_test_2 = {
-  email: "test2@gmail.com",
-  password: "123456",
-};
-
 let access_token = "";
 let access_token2 = "";
 beforeAll(async () => {
-  let user = await User.create(admin_test);
-  let user2 = await User.create(user_test_1);
+  admins = admins.map((e) => {
+    e.createdAt = e.updatedAt = new Date();
+    e.password = encrypt(e.password);
+    return e;
+  });
+  staff = staff.map((e) => {
+    e.createdAt = e.updatedAt = new Date();
+    e.password = encrypt(e.password);
+    return e;
+  });
+
+  // await queryInterface.bulkInsert("Users", admins, {});
+  // await queryInterface.bulkInsert("Users", staff, {});
+
+  const admin1 = await User.findOne({ where: { role: "Admin" } });
+  const staff1 = await User.findOne({ where: { role: "Staff" } });
+
+  // console.log(admin1);
 
   access_token = signToken({
-    id: user.id,
-    role: user.role,
+    id: admin1.id,
+    role: admin1.role,
   });
 
   access_token2 = signToken({
-    id: user2.id,
-    role: user2.role,
+    id: staff1.id,
+    role: staff1.role,
   });
 });
 
-afterAll(async () => {
-  await queryInterface.bulkDelete("Users", null, {
-    truncate: true,
-    restartIdentity: true,
-    cascade: true,
-  });
-});
+// afterAll(async () => {
+//   await queryInterface.bulkDelete("Users", null, {
+//     truncate: true,
+//     restartIdentity: true,
+//     cascade: true,
+//   });
+// });
 
 describe("POST /add-user", () => {
   describe("Success", () => {
@@ -52,11 +59,11 @@ describe("POST /add-user", () => {
       const { status, body } = await request(app)
         .post("/add-user")
         .set("Authorization", "Bearer " + access_token)
-        .send(user_test_2);
+        .send(user_test_1);
 
       console.log(body);
       expect(status).toBe(201);
-      expect(body).toHaveProperty("email", user_test_2.email);
+      expect(body).toHaveProperty("email", user_test_1.email);
       expect(body).toHaveProperty("id", expect.any(Number));
     });
   });
@@ -204,7 +211,7 @@ describe("POST /login", () => {
     test("failed login when user input the invalid password", async () => {
       const { status, body } = await request(app)
         .post("/login")
-        .send({ email: "test2@gmail.com", password: "123" });
+        .send({ email: "test1@gmail.com", password: "123" });
 
       console.log(body);
       expect(status).toBe(401);

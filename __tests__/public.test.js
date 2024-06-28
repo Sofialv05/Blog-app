@@ -4,21 +4,31 @@ const { sequelize, Post } = require("../models");
 const { queryInterface } = sequelize;
 let posts = require("../data/posts.json");
 
-beforeAll(async () => {
-  posts = posts.map((e) => {
-    e.createdAt = e.updatedAt = new Date();
-    return e;
-  });
-  await queryInterface.bulkInsert("Posts", posts, {});
-});
+// beforeAll(async () => {
+//   posts = posts.map((e) => {
+//     e.createdAt = e.updatedAt = new Date();
+//     return e;
+//   });
+//   await queryInterface.bulkInsert("Posts", posts, {});
+// });
 
-afterAll(async () => {
-  await queryInterface.bulkDelete("Posts", null, {
-    truncate: true,
-    restartIdentity: true,
-    cascade: true,
-  });
-});
+// afterAll(async () => {
+//   await queryInterface.bulkDelete("Posts", null, {
+//     truncate: true,
+//     restartIdentity: true,
+//     cascade: true,
+//   });
+//   await queryInterface.bulkDelete("Categories", null, {
+//     truncate: true,
+//     restartIdentity: true,
+//     cascade: true,
+//   });
+//   await queryInterface.bulkDelete("Users", null, {
+//     truncate: true,
+//     restartIdentity: true,
+//     cascade: true,
+//   });
+// });
 
 describe("GET pub/posts", () => {
   describe("Success", () => {

@@ -4,7 +4,6 @@ const categoryRouters = require("./CategoryRouters");
 const pubRouters = require("./PubRouters");
 const UserController = require("../controllers/UserController");
 const authentication = require("../middlewares/authentication");
-const errorHandler = require("../middlewares/errorHandler");
 const { authorizeAdmin } = require("../middlewares/authorization");
 
 router.get("/", (req, res) => {
@@ -23,7 +22,5 @@ router.use("/posts", postRouters);
 
 //--------support entity
 router.use("/categories", categoryRouters);
-
-router.use(errorHandler);
 
 module.exports = router;

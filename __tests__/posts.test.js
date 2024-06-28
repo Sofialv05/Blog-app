@@ -1,25 +1,12 @@
 const app = require("../app");
 const request = require("supertest");
-const { sequelize, User } = require("../models");
+const { sequelize, User, Post } = require("../models");
 const { signToken } = require("../helpers/jwt");
 const { queryInterface } = sequelize;
-const categories = require("../data/categories.json");
-
-const admin_test = {
-  email: "admin1@gmail.com",
-  password: "123456",
-  role: "Admin",
-};
-
-const user_test_1 = {
-  email: "test1@gmail.com",
-  password: "123456",
-};
-
-const user_test_2 = {
-  email: "test2@gmail.com",
-  password: "123456",
-};
+let categories = require("../data/categories.json");
+let admins = require("../data/admins.json");
+let staff = require("../data/staff.json");
+const { encrypt } = require("../helpers/bycript");
 
 const new_post = {
   title: "test title",
@@ -36,64 +23,80 @@ const new_post_2 = {
   AuthorId: 5,
 };
 
-let access_token_admin = "";
-let access_token_user1 = "";
-let access_token_user2 = "";
+let access_token = "";
+let access_token2 = "";
+let staff_post;
 beforeAll(async () => {
-  categories.forEach((e) => {
+  admins = admins.map((e) => {
     e.createdAt = e.updatedAt = new Date();
+    e.password = encrypt(e.password);
+    return e;
   });
+  staff = staff.map((e) => {
+    e.createdAt = e.updatedAt = new Date();
+    e.password = encrypt(e.password);
+    return e;
+  });
+
+  categories = categories.map((e) => {
+    e.createdAt = e.updatedAt = new Date();
+    return e;
+  });
+
+  // await queryInterface.bulkInsert("Users", admins, {});
+  // await queryInterface.bulkInsert("Users", staff, {});
+
+  const admin1 = await User.findOne({ where: { role: "Admin" } });
+  const staff1 = await User.findOne({ where: { role: "Staff" } });
 
   await queryInterface.bulkInsert("Categories", categories, {});
-  let user = await User.create(admin_test);
-  let user2 = await User.create(user_test_1);
-  let user3 = await User.create(user_test_2);
+  // console.log(admin1);
 
-  access_token_admin = signToken({
-    id: user.id,
-    role: user.role,
+  access_token = signToken({
+    id: admin1.id,
+    role: admin1.role,
   });
 
-  access_token_user1 = signToken({
-    id: user2.id,
-    role: user2.role,
-  });
-
-  access_token_user2 = signToken({
-    id: user3.id,
-    role: user3.role,
-  });
-
-  userId_admin = user.id;
-  userId_user1 = user2.id;
-});
-
-afterAll(async () => {
-  await queryInterface.bulkDelete("Categories", null, {
-    truncate: true,
-    restartIdentity: true,
-    cascade: true,
-  });
-
-  await queryInterface.bulkDelete("Users", null, {
-    truncate: true,
-    restartIdentity: true,
-    cascade: true,
-  });
-
-  await queryInterface.bulkDelete("Posts", null, {
-    truncate: true,
-    restartIdentity: true,
-    cascade: true,
+  access_token2 = signToken({
+    id: staff1.id,
+    role: staff1.role,
   });
 });
+
+// afterAll(async () => {
+//   await queryInterface.bulkDelete("Users", null, {
+//     truncate: true,
+//     restartIdentity: true,
+//     cascade: true,
+//   });
+// });
+
+// afterAll(async () => {
+//   await queryInterface.bulkDelete("Categories", null, {
+//     truncate: true,
+//     restartIdentity: true,
+//     cascade: true,
+//   });
+
+//   await queryInterface.bulkDelete("Users", null, {
+//     truncate: true,
+//     restartIdentity: true,
+//     cascade: true,
+//   });
+
+//   await queryInterface.bulkDelete("Posts", null, {
+//     truncate: true,
+//     restartIdentity: true,
+//     cascade: true,
+//   });
+// });
 
 describe("POST /posts", () => {
   describe("Success", () => {
     test("sucess adding a new post", async () => {
       const { status, body } = await request(app)
         .post("/posts")
-        .set("Authorization", "Bearer " + access_token_user1)
+        .set("Authorization", "Bearer " + access_token)
         .send(new_post);
 
       console.log(body);
@@ -136,7 +139,7 @@ describe("POST /posts", () => {
       test("failed when post's title is empty", async () => {
         const { status, body } = await request(app)
           .post("/posts")
-          .set("Authorization", "Bearer " + access_token_user1)
+          .set("Authorization", "Bearer " + access_token2)
           .send({
             title: "",
             content: "test content",
@@ -152,7 +155,7 @@ describe("POST /posts", () => {
       test("failed when post's content is empty", async () => {
         const { status, body } = await request(app)
           .post("/posts")
-          .set("Authorization", "Bearer " + access_token_user1)
+          .set("Authorization", "Bearer " + access_token2)
           .send({
             title: "test",
             content: "",
@@ -167,7 +170,7 @@ describe("POST /posts", () => {
       test("failed when post's category is empty", async () => {
         const { status, body } = await request(app)
           .post("/posts")
-          .set("Authorization", "Bearer " + access_token_user1)
+          .set("Authorization", "Bearer " + access_token2)
           .send({
             title: "test",
             content: "test content",
@@ -187,7 +190,7 @@ describe("GET /posts", () => {
     test("success showing all posts", async () => {
       const { status, body } = await request(app)
         .get("/posts")
-        .set("Authorization", "Bearer " + access_token_user1);
+        .set("Authorization", "Bearer " + access_token2);
 
       console.log(body);
       expect(status).toBe(200);
@@ -229,7 +232,7 @@ describe("GET /posts/:postId", () => {
     test("success showing a post with post's id", async () => {
       const { status, body } = await request(app)
         .get("/posts/1")
-        .set("Authorization", "Bearer " + access_token_user1);
+        .set("Authorization", "Bearer " + access_token2);
 
       console.log(body);
       expect(status).toBe(200);
@@ -268,7 +271,7 @@ describe("GET /posts/:postId", () => {
       test("Failed getting a post when the post's id is unavailable", async () => {
         const { status, body } = await request(app)
           .get("/posts/0")
-          .set("Authorization", "Bearer " + access_token_user1);
+          .set("Authorization", "Bearer " + access_token2);
 
         console.log(body);
         expect(status).toBe(404);
@@ -283,7 +286,7 @@ describe("PUT /posts/:postId", () => {
     test("success updating a post by post's id", async () => {
       const { status, body } = await request(app)
         .put("/posts/1")
-        .set("Authorization", "Bearer " + access_token_user1)
+        .set("Authorization", "Bearer " + access_token)
         .send(new_post_2);
 
       console.log(body);
@@ -326,7 +329,7 @@ describe("PUT /posts/:postId", () => {
       test("Failed getting a post when the post's id is unavailable", async () => {
         const { status, body } = await request(app)
           .put("/posts/0")
-          .set("Authorization", "Bearer " + access_token_user1)
+          .set("Authorization", "Bearer " + access_token2)
           .send(new_post_2);
 
         // console.log(body);
@@ -339,7 +342,7 @@ describe("PUT /posts/:postId", () => {
       test("Failed when user's role is not an admin when trying to update a post by id", async () => {
         const { status, body } = await request(app)
           .put("/posts/1")
-          .set("Authorization", "Bearer " + access_token_user2)
+          .set("Authorization", "Bearer " + access_token2)
           .send(new_post_2);
 
         console.log(body);
@@ -352,7 +355,7 @@ describe("PUT /posts/:postId", () => {
       test("failed when post's title is empty when updating", async () => {
         const { status, body } = await request(app)
           .put("/posts/1")
-          .set("Authorization", "Bearer " + access_token_user1)
+          .set("Authorization", "Bearer " + access_token)
           .send({
             title: "",
             content: "test content",
@@ -368,7 +371,7 @@ describe("PUT /posts/:postId", () => {
       test("failed when post's content is empty when updating", async () => {
         const { status, body } = await request(app)
           .put("/posts/1")
-          .set("Authorization", "Bearer " + access_token_user1)
+          .set("Authorization", "Bearer " + access_token)
           .send({
             title: "test",
             content: "",
@@ -383,7 +386,7 @@ describe("PUT /posts/:postId", () => {
       test("failed when post's category is empty when updating", async () => {
         const { status, body } = await request(app)
           .put("/posts/1")
-          .set("Authorization", "Bearer " + access_token_user1)
+          .set("Authorization", "Bearer " + access_token)
           .send({
             title: "test",
             content: "test content",
@@ -425,7 +428,7 @@ describe("DELETE /posts/:postId", () => {
       test("Failed deleting a post when the post's id is unavailable", async () => {
         const { status, body } = await request(app)
           .delete("/posts/0")
-          .set("Authorization", "Bearer " + access_token_user1);
+          .set("Authorization", "Bearer " + access_token2);
 
         // console.log(body);
         expect(status).toBe(404);
@@ -437,7 +440,7 @@ describe("DELETE /posts/:postId", () => {
       test("Failed when user's role is not an admin when trying to delete a post by id", async () => {
         const { status, body } = await request(app)
           .delete("/posts/1")
-          .set("Authorization", "Bearer " + access_token_user2);
+          .set("Authorization", "Bearer " + access_token2);
 
         console.log(body);
         expect(status).toBe(403);
@@ -450,7 +453,7 @@ describe("DELETE /posts/:postId", () => {
     test("success deleting a post by post's id", async () => {
       const { status, body } = await request(app)
         .delete("/posts/1")
-        .set("Authorization", "Bearer " + access_token_user1);
+        .set("Authorization", "Bearer " + access_token);
 
       console.log(body);
       expect(status).toBe(200);
