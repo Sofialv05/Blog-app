@@ -4,7 +4,6 @@ const { User } = require("../models");
 const authentication = async (req, res, next) => {
   try {
     let access_token = req.headers.authorization;
-    // console.log(access_token);
     if (!access_token) throw { name: "Unauthenticated" };
     const [bearer, token] = access_token.split(" ");
 
@@ -20,7 +19,6 @@ const authentication = async (req, res, next) => {
 
     next();
   } catch (err) {
-    // console.log(err.name);
     next(err);
   }
 };

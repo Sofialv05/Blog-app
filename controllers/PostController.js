@@ -8,7 +8,6 @@ cloudinary.config({
 
 module.exports = class PostController {
   static async findAllPosts(req, res, next) {
-    //done
     try {
       const posts = await Post.findAll({
         include: {
@@ -21,17 +20,14 @@ module.exports = class PostController {
       });
       res.status(200).json(posts);
     } catch (err) {
-      // console.log(err);
       next(err);
     }
   }
 
   static async createPost(req, res, next) {
-    //done
     const AuthorId = req.user.id;
     const { title, content, imgUrl, CategoryId } = req.body;
     try {
-      //   console.log(req.body);
       const createdPost = await Post.create({
         title,
         content,
@@ -46,16 +42,12 @@ module.exports = class PostController {
   }
 
   static async findPostById(req, res, next) {
-    //done
     const { postId } = req.params;
     try {
-      //   console.log(req.body);
       const post = await Post.findByPk(postId);
-      if (!post) {
-        throw {
-          name: "NotFound",
-        };
-      }
+
+      if (!post) throw { name: "NotFound", message: "Post not found" };
+
       res.status(200).json(post);
     } catch (err) {
       next(err);
@@ -63,13 +55,10 @@ module.exports = class PostController {
   }
 
   static async updatePostById(req, res, next) {
-    //done
     const { title, content, imgUrl, CategoryId } = req.body;
     const { postId } = req.params;
     try {
-      //   console.log(req.body);
       const post = await Post.findByPk(postId);
-      // console.log(post);
 
       await post.update({
         title,
@@ -84,8 +73,6 @@ module.exports = class PostController {
   }
 
   static async patchImgPostById(req, res, next) {
-    //done
-
     const { postId } = req.params;
     try {
       const post = await Post.findByPk(postId);
@@ -96,8 +83,9 @@ module.exports = class PostController {
 
       const result = await cloudinary.uploader.upload(base64url);
 
+      console.log(result);
       await post.update({
-        imgUrl: result.url,
+        imgUrl: result.secure_url,
       });
       res.status(200).json(post);
     } catch (err) {
@@ -106,7 +94,6 @@ module.exports = class PostController {
   }
 
   static async deletePostById(req, res, next) {
-    //done
     const { postId } = req.params;
     try {
       await Post.destroy({

@@ -1,7 +1,6 @@
 const { Category } = require("../models");
 
 module.exports = class CategoryController {
-  //done
   static async createCategory(req, res, next) {
     const { name } = req.body;
     try {
@@ -13,7 +12,6 @@ module.exports = class CategoryController {
   }
 
   static async findAllCategories(req, res, next) {
-    //done
     try {
       const categories = await Category.findAll();
       res.status(200).json(categories);
@@ -23,7 +21,6 @@ module.exports = class CategoryController {
   }
 
   static async updateCategoryById(req, res, next) {
-    //done
     const { name } = req.body;
     const { categoryId } = req.params;
     try {
@@ -37,23 +34,4 @@ module.exports = class CategoryController {
       next(err);
     }
   }
-
-  // static async deleteCategoryById(req, res) { // no 9
-  //   //done
-  //   const { categoryId } = req.params;
-  //   try {
-  //     const deleteCategory = await Category.destroy({
-  //       where: {
-  //         id: +categoryId,
-  //       },
-  //     });
-  //     if (!deleteCategory) {
-  //       res.status(404).json({ message: "Category not found" });
-  //     } else {
-  //       res.status(200).json({ message: "Success deleting category" });
-  //     }
-  //   } catch (err) {
-  //     res.status(500).json({ message: "Internal Server Error" });
-  //   }
-  // }
 };

@@ -1,2 +1,0 @@
-//user login => dapet token => buka postman => authorization => paste token => token muncul di header => Bearer <token>
-// user login => nerima token isi payload id si user => autentikasi token => di middleware set request si user isinya adalah id si user yg didapat untuk di simpan dan di lempar ke method lain melalui middleware => sehingga ketika user buat post set dulu di method controllernya agar User.Id dari fk si post ketika req.body

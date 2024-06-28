@@ -40,7 +40,6 @@ module.exports = class PubController {
       }
 
       const { count, rows } = await Post.findAndCountAll(options);
-      // const posts = await Post.findAll(options);
       res.status(200).json({
         page: pageNumber,
         data: rows,
@@ -59,7 +58,7 @@ module.exports = class PubController {
       const post = await Post.findByPk(postId);
 
       console.log(post);
-      if (!post) throw { name: "NotFound" };
+      if (!post) throw { name: "NotFound", message: "Post not found" };
 
       res.status(200).json(post);
     } catch (err) {

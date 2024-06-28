@@ -3,8 +3,6 @@ const request = require("supertest");
 const { sequelize, Post } = require("../models");
 const { queryInterface } = sequelize;
 let posts = require("../data/posts.json");
-let categories = require("../data/categories.json");
-let users = require("../data/staff.json");
 
 beforeAll(async () => {
   posts = posts.map((e) => {
@@ -65,7 +63,7 @@ describe("GET pub/posts/:postId", () => {
 
         console.log(body);
         expect(status).toBe(404);
-        expect(body).toHaveProperty("message", "Post not found");
+        expect(body).toHaveProperty("name", "NotFound");
       });
     });
   });
