@@ -41,11 +41,11 @@ module.exports = class PubController {
 
       const { count, rows } = await Post.findAndCountAll(options);
       res.status(200).json({
-        page: pageNumber,
+        page: +pageNumber,
         data: rows,
-        totalData: count,
+        totalData: +count,
         totalPage: Math.ceil(count / limit),
-        dataPerPage: limit,
+        dataPerPage: +limit,
       });
     } catch (err) {
       next(err);

@@ -331,7 +331,7 @@ describe("PUT /posts/:postId", () => {
 
         // console.log(body);
         expect(status).toBe(404);
-        expect(body).toHaveProperty("name", "NotFound");
+        expect(body).toHaveProperty("message", "Post not found");
       });
     });
 
@@ -429,7 +429,7 @@ describe("DELETE /posts/:postId", () => {
 
         // console.log(body);
         expect(status).toBe(404);
-        expect(body).toHaveProperty("name", "NotFound");
+        expect(body).toHaveProperty("message", "Post not found");
       });
     });
 
