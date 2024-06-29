@@ -4,6 +4,134 @@
 
 # Blog API Documentation
 
+## User Endpoints
+
+List of available endpoints:
+
+- `POST /add-user`
+- `POST /login`
+
+### 1. POST /add-user
+
+Description:
+In order to use this feature, login is required beforehand. Only users with the Admin role can register staff members.
+
+Response (_201 - Created_)
+
+```json
+{
+    "id": "number",
+    "email": "string"
+}
+```
+
+Response (_400 - Bad Request_)
+
+```json
+{
+    "message": "Please provide a valid email address"
+}
+
+OR
+
+{
+    "message": "This email is already in use"
+}
+
+OR
+
+{
+    "message": "email is required"
+}
+
+OR
+
+{
+    "message": "password is required"
+}
+
+OR
+
+{
+    "message": "Password must be at least 5 characters"
+}
+```
+
+Response (_401 - Unaouthorized_)
+
+```json
+{
+    "message": "Unauthenticated"
+}
+```
+
+Response (_403 - Forbidden_)
+
+```json
+{
+    "message": "Unauthorized"
+}
+```
+
+Response (_500 - Internal Server Error_)
+
+```json
+{
+    "message": "Internal Server Error"
+}
+```
+
+### 2. POST /login
+
+Description:
+The login feature allows access to registered users with the role staff or admin. Users with the staff or admin role can need to login first in order to access some features like create, edit, and delete posts.
+
+Response (_200 - OK_)
+
+```json
+{
+    "access_token": "string"
+}
+```
+
+Response (_400 - Bad Request_)
+
+```json
+{
+    "message": "Email is required"
+}
+
+OR
+
+{
+    "message": "Password is required"
+}
+
+```
+
+Response (_401 - Unauthorized_)
+
+```json
+{
+    "message": "Email has not been registered"
+}
+
+OR
+
+{
+    "message": "Invalid password"
+}
+
+```
+
+Response (_500 - Internal Server Error_)
+
+```json
+{
+    "message": "Internal Server Error"
+}
+```
+
 ## Post Endpoints
 
 List of available endpoints:
@@ -25,7 +153,7 @@ Response (_200 - OK_)
 [
     {
         "id": "number",
-        "title": "string",
+        "email": "string",
         "content": "text",
         "imgUrl": "string",
         "CategoryId": "number",
