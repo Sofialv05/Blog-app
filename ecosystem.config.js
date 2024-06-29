@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: "Project-Architectural-Blog",
-      script: "./app.js",
+      script: "bin/www",
       env: {
         NODE_ENV: "production",
         PORT: 80,
@@ -18,4 +18,3 @@ module.exports = {
     },
   ],
 };
-

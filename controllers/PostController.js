@@ -83,7 +83,6 @@ module.exports = class PostController {
 
       const result = await cloudinary.uploader.upload(base64url);
 
-      console.log(result);
       await post.update({
         imgUrl: result.secure_url,
       });
