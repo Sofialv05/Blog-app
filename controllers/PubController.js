@@ -57,7 +57,6 @@ module.exports = class PubController {
     try {
       const post = await Post.findByPk(postId);
 
-      console.log(post);
       if (!post) throw { name: "NotFound", message: "Post not found" };
 
       res.status(200).json(post);

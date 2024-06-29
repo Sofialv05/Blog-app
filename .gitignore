@@ -2,4 +2,3 @@ node_modules
 .env
 coverage
 notesRepo.txt
-ecosystem.config.js

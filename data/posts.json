@@ -124,5 +124,19 @@
         "imgUrl": "https://example.com/images/urban-design.jpg",
         "CategoryId": 5,
         "AuthorId": 6
+    },
+    {
+        "title": "The Evolution of Brutalist Architecture",
+        "content": "Explore the evolution and impact of Brutalist architecture in the 20th century. Brutalism, characterized by its raw concrete aesthetic and geometric forms, emerged post-World War II as a symbol of functionalism and urban renewal. Architects like Le Corbusier and Paul Rudolph championed this style, creating iconic structures such as the Barbican Centre in London and the Boston City Hall. Despite polarizing opinions, Brutalism's influence on urban landscapes and cultural heritage remains profound, sparking renewed interest in preservation and adaptive reuse.",
+        "imgUrl": "https://example.com/images/brutalist-architecture.jpg",
+        "CategoryId": 1,
+        "AuthorId": 4
+    },
+    {
+        "title": "Modernism in South American Architecture",
+        "content": "Discover the legacy of Modernism in South American architecture and its impact on regional identity. Beginning in the early 20th century, architects like Oscar Niemeyer and Lina Bo Bardi redefined urban landscapes with innovative designs that integrated modernist principles with local materials and cultural motifs. Iconic structures such as Brasília's Cathedral and São Paulo's São Paulo Museum of Art exemplify this fusion of international style and regional expression. Today, South American Modernism continues to inspire architects globally, influencing contemporary urban planning and sustainable design practices.",
+        "imgUrl": "https://example.com/images/south-american-modernism.jpg",
+        "CategoryId": 2,
+        "AuthorId": 5
     }
 ]

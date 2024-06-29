@@ -1,5 +1,6 @@
 # Catatan Week 1
 
-> Tuliskan apapun yang kalian pelajari pada phase 2 week-1 di file ini.
->
-> "Pemahaman yang baik berasal dari keinginan untuk terus belajar, dan catatan adalah langkah pertama menuju pengetahuan yang dalam."
+di hari pertama saya belajar tentang REST API
+di hari kedua saya belajar tentang cara menggunakan 3rd party API seperti cloudinary
+di hari ketiga saya belajar tentang cara TDD, yaitu dengan mengetes apakah codingan dapat berjalan dengan lancar
+di hari keempat saya belajar tentang cara mendeploy API menggunakan AWS
