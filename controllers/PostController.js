@@ -8,8 +8,10 @@ cloudinary.config({
 
 module.exports = class PostController {
   static async findAllPosts(req, res, next) {
+    const role = req.user.role;
+    const AuthorId = req.user.id;
     try {
-      const posts = await Post.findAll({
+      let posts = await Post.findAll({
         include: {
           model: User,
           as: "Author",
@@ -18,6 +20,10 @@ module.exports = class PostController {
           },
         },
       });
+
+      if (role !== "Admin") {
+        posts = posts.filter((post) => post.AuthorId == AuthorId);
+      }
       res.status(200).json(posts);
     } catch (err) {
       next(err);
