@@ -1,4 +1,4 @@
-const { Post } = require("../models");
+const { Post, Category } = require("../models");
 const { Op } = require("sequelize");
 
 module.exports = class PubController {
@@ -60,6 +60,15 @@ module.exports = class PubController {
       if (!post) throw { name: "NotFound", message: "Post not found" };
 
       res.status(200).json(post);
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  static async findAllCategories(req, res, next) {
+    try {
+      const categories = await Category.findAll();
+      res.status(200).json(categories);
     } catch (err) {
       next(err);
     }
